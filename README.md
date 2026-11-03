@@ -2,7 +2,7 @@
 
 AI assistant superintendent. The full V1 spec is in `GARY_V1_SPEC.md`.
 
-**Status:** Milestone 1 (Skeleton) complete — Nov 3, 2026. Live at https://gary-8ac9.vercel.app, installed on phone. Milestone 2 (Document vault) built — run migration 0003, then upload specs on the Docs tab.
+**Status:** Milestone 1 (Skeleton) complete — Nov 3, 2026. Live at https://gary-8ac9.vercel.app, installed on phone. Milestone 2 (Document vault) complete — Nov 3, 2026. FS18 Vol 1 and Vol 2 indexed. Next: Milestone 3 (Ask Gary).
 
 ## Milestone 1 setup
 
@@ -32,7 +32,8 @@ npm run dev
 ## Milestone 2: document vault
 
 - Run `supabase/migrations/0003_document_search.sql` in the Supabase SQL Editor (after 0001 and 0002).
-- Vercel needs `VOYAGE_API_KEY` (server-only).
+- Vercel needs `VOYAGE_API_KEY` (server-only, on the gary project, Production checked). The Voyage account needs a payment method on file, or it's limited to 3 requests a minute; the free tokens still apply.
+- `/api/health` (signed in) shows which server keys the live deployment can see.
 - Docs tab → Choose PDFs. The browser uploads straight to Supabase Storage; then `/api/documents/[id]/index` extracts text and splits it into chunks, and `/api/documents/[id]/embed` adds Voyage embeddings in batches until done.
 - Search: a section number ("07 92 00", "079200") jumps to that section; anything else runs keyword + meaning search. A section that isn't in the set (e.g. 08 71 00 on FS18, listed as "Future Document") shows where it's mentioned instead.
 - Citations show document, section, printed section page and PDF page.
