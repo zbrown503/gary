@@ -2,7 +2,7 @@
 
 AI assistant superintendent. The full V1 spec is in `GARY_V1_SPEC.md`.
 
-**Status:** Milestone 1 (Skeleton) — app, sign-in, database schema and PWA manifest are built; accounts and deploy are next.
+**Status:** Milestone 1 (Skeleton) complete — Nov 3, 2026. Live at https://gary-8ac9.vercel.app, installed on phone. Next: Milestone 2 (Document vault).
 
 ## Milestone 1 setup
 
