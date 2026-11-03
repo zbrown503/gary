@@ -5,7 +5,7 @@ import { embeddingInput } from "@/lib/specs/chunk";
 
 export const maxDuration = 60;
 
-const BATCHES_PER_CALL = 3;
+const BATCHES_PER_CALL = 2;
 
 // Step 2 of indexing: embed the next few batches of chunks. The Docs screen calls this
 // repeatedly until `remaining` is 0, then the document is marked ready.
