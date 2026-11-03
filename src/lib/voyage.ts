@@ -10,8 +10,12 @@ function baseUrl(key: string) {
 }
 
 export async function embed(texts: string[], inputType: "document" | "query"): Promise<number[][]> {
-  const key = process.env.VOYAGE_API_KEY;
-  if (!key) throw new Error("VOYAGE_API_KEY is not set in Vercel environment variables.");
+  const key = process.env.VOYAGE_API_KEY?.trim();
+  if (!key) {
+    throw new Error(
+      `VOYAGE_API_KEY is not set for this deployment (${process.env.VERCEL_ENV ?? "unknown"} environment, commit ${process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "unknown"}).`
+    );
+  }
   if (!texts.length) return [];
 
   const res = await fetch(`${baseUrl(key)}/embeddings`, {
