@@ -39,6 +39,7 @@ Everything below has a free or low-cost tier; expect roughly $20–60/month in V
 | Database, login, file storage | Supabase (Postgres + pgvector + Storage + Auth) | One service for data, documents, search index and sign-in | supabase.com |
 | Hosting | Vercel | One-click deploys from GitHub | vercel.com |
 | AI | Claude API (Sonnet for daily work) | Tool use, long documents, reads images of plan sheets | console.anthropic.com |
+| Embeddings | Voyage AI (`voyage-4`, 1024 dimensions) | Anthropic's recommended embedding provider; 200M free tokens covers many spec books | voyageai.com |
 | Voice to text | OpenAI Whisper API or Deepgram | Accurate on jobsite jargon; pick one | Either provider |
 | Microsoft 365 | Microsoft Graph API | Outlook drafts, calendar, OneDrive files | Azure app registration (portal.azure.com) |
 | Excel import/export | SheetJS | Read and write .xlsx look-aheads in the browser | None |
@@ -109,7 +110,7 @@ No model training. Documents are split into searchable pieces, and Gary pulls th
 1. **Upload.** File goes to Supabase Storage; a `documents` row is created with status "uploading".
 2. **Extract text.** Specs and contracts: extract text page by page (pdf-parse or a PDF text service). Scanned pages with no text: run OCR, or send the page image to Claude to transcribe.
 3. **Split smartly.** Specs split on section numbers (e.g. 08 71 00) and article headings; contracts on article and clause numbers. Keep each chunk 500–1,000 words with its section number, title, and page attached.
-4. **Index.** Create an embedding for each chunk and store it in `doc_chunks` (pgvector). Also keep a plain keyword search, because supers search for exact section numbers and product names.
+4. **Index.** Create a Voyage AI `voyage-4` embedding for each chunk and store it in `doc_chunks` (pgvector). Also keep a plain keyword search, because supers search for exact section numbers and product names.
 5. **Plans.** Store each sheet as an image with its sheet number and title. In V1, Gary finds sheets by number, title, and any extractable text, then looks at the image when asked. Answers about plans say "verify on sheet X".
 6. **Sub directory.** Import a CSV or Excel directly into `contacts`.
 7. **Ready.** Status flips to "ready" and the document appears in Docs.
@@ -157,7 +158,7 @@ These are the answers an IT reviewer will ask for, so build them in from the sta
 - **Draft-only by design.** No `Mail.Send` permission, no Procore write access in V1–V2. Gary's tools can only create drafts and proposals. `Mail.ReadWrite` technically allows reading, moving and deleting mail; the app uses it only to create drafts (see Integrations).
 - **Approval log.** Every approved email and schedule change is recorded with who approved it and when (`approved_by`, `approved_at` on `drafts` and `activity_changes`).
 - **No training on your data.** Use the paid Claude API, which by default does not train on API inputs. Confirm the current terms and keep a link for IT.
-- **Keys stay on the server.** Claude, Microsoft, and Whisper keys live in Vercel environment variables, never in the browser.
+- **Keys stay on the server.** Claude, Voyage, Microsoft, and Whisper keys live in Vercel environment variables, never in the browser.
 - **Row-level security** in Supabase so each user only sees their own data.
 - **Encrypted storage** for documents (Supabase default) and signed, expiring links to view files.
 - **Microsoft tokens** stored encrypted; you can disconnect from Settings at any time.

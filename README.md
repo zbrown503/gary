@@ -27,4 +27,4 @@ npm run dev
 
 - Next.js 16: the auth gate lives in `src/proxy.ts` (the renamed `middleware`).
 - The `anon` key is safe in the browser; row-level security limits each user to their own rows. Never put the `service_role` key in a `NEXT_PUBLIC_` variable.
-- `doc_chunks.embedding` is sized for OpenAI `text-embedding-3-small` (1536). Change it before Milestone 2 if you pick another embedding model.
+- Embeddings: Voyage AI `voyage-4`, 1024 dimensions (migration `0002`). Index chunks with `input_type: "document"` and search with `input_type: "query"`. Keys starting `pa-` use `https://api.voyageai.com/v1`; keys from MongoDB Atlas start `al-` and use `https://ai.mongodb.com/v1`.

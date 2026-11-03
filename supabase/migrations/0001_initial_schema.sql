@@ -43,8 +43,7 @@ create table public.documents (
 );
 
 -- ---------- doc_chunks ----------
--- Embedding size 1536 matches OpenAI text-embedding-3-small. Change before Milestone 2
--- if you pick a different embedding model.
+-- Embedding size was changed to 1024 (Voyage AI voyage-4) in 0002_voyage_embeddings.sql.
 create table public.doc_chunks (
   id uuid primary key default gen_random_uuid(),
   document_id uuid not null references public.documents(id) on delete cascade,
