@@ -2,7 +2,7 @@
 
 AI assistant superintendent. The full V1 spec is in `GARY_V1_SPEC.md`.
 
-**Status:** Milestone 1 (Skeleton) complete — Nov 3, 2026. Live at https://gary-8ac9.vercel.app, installed on phone. Next: Milestone 2 (Document vault).
+**Status:** Milestone 1 (Skeleton) complete — Nov 3, 2026. Live at https://gary-8ac9.vercel.app, installed on phone. Milestone 2 (Document vault) built — run migration 0003, then upload specs on the Docs tab.
 
 ## Milestone 1 setup
 
@@ -28,3 +28,12 @@ npm run dev
 - Next.js 16: the auth gate lives in `src/proxy.ts` (the renamed `middleware`).
 - The `anon` key is safe in the browser; row-level security limits each user to their own rows. Never put the `service_role` key in a `NEXT_PUBLIC_` variable.
 - Embeddings: Voyage AI `voyage-4`, 1024 dimensions (migration `0002`). Index chunks with `input_type: "document"` and search with `input_type: "query"`. Keys starting `pa-` use `https://api.voyageai.com/v1`; keys from MongoDB Atlas start `al-` and use `https://ai.mongodb.com/v1`.
+
+## Milestone 2: document vault
+
+- Run `supabase/migrations/0003_document_search.sql` in the Supabase SQL Editor (after 0001 and 0002).
+- Vercel needs `VOYAGE_API_KEY` (server-only).
+- Docs tab → Choose PDFs. The browser uploads straight to Supabase Storage; then `/api/documents/[id]/index` extracts text and splits it into chunks, and `/api/documents/[id]/embed` adds Voyage embeddings in batches until done.
+- Search: a section number ("07 92 00", "079200") jumps to that section; anything else runs keyword + meaning search. A section that isn't in the set (e.g. 08 71 00 on FS18, listed as "Future Document") shows where it's mentioned instead.
+- Citations show document, section, printed section page and PDF page.
+- Scanned PDFs with no text layer aren't supported yet (OCR is a later step).
